@@ -1,0 +1,48 @@
+= Python Generic TypedDict
+
+== My notes while drafting a https://www.python.org/dev/peps/[PEP]
+
+The PR that started my journey through this rabbit hole: https://github.com/microsoft/pyright/pull/1390
+
+Advice in typing-sig mailing list with a sketch on how to move forward with a PEP: https://mail.python.org/archives/list/typing-sig@python.org/thread/GKKSWMONVHRLFI4NJAT36RPZCGGIBJ3G/
+
+== Goal
+
+To extend `https://www.python.org/dev/peps/pep-0589/[typing.TypedDict]` with generic value support.
+At the moment `TypedDict` is a special type that is not paramterizable. We need to add runtime support for it through `stdlib` and provide a type consistency specification for type checkers.
+
+[source,python]
+----
+from typing import TypedDict, TypeVar, Generic, List
+T = TypeVar("T")
+
+class TD(Generic[T], TypedDict):
+    f1: List[T]
+    
+def test_td(aa: TD[T], bb: TD[T]):
+    return aa["f1"], bb["f1"]
+
+td1 = test_td({"f1": ["foo"]}, {"f1": ["bar"]})
+reveal_type(td1) # info: Type of "td1" is "tuple[List[str], List[str]]"
+----
+
+== TODO
+
+As sketched out by David Foster in typing-sig.
+
+* [ ] Draft a PEP
+* [ ] Get reviewed in typing-sig, get soft approval
+* [ ] Implementations:
+** [ ] Generic `TypedDict` runtime in `typing_extensions`
+** [ ] Generic `TypedDict` in one of the type checkers
+* [ ] Get the PEP approved
+
+== Initial notes
+
+
+- I'm expecting this will be a mishmash of ideas from different concepts that we already have
+Class based syntax already has Generic support, but the assignment syntax may need to be more explored. It will be similar to how we declare Generic aliases (Guido had mentioned https://github.com/python/mypy/issues/3863[here]).
+- Type consistency especially regarding structural subtyping will need to be carefully explored. I assume this will be similar to how we do Protocols with Generics.
+- After some investigation I noticed run time support for TypedDict before PEP 560 will need some metaclass hacks due to metaclass conflicts. But after version 3.7 with PEP 560 it seems simpler.
+
+
