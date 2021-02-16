@@ -39,10 +39,34 @@ As sketched out by David Foster in typing-sig.
 
 == Initial notes
 
-
 - I'm expecting this will be a mishmash of ideas from different concepts that we already have
 Class based syntax already has Generic support, but the assignment syntax may need to be more explored. It will be similar to how we declare Generic aliases (Guido had mentioned https://github.com/python/mypy/issues/3863[here]).
 - Type consistency especially regarding structural subtyping will need to be carefully explored. I assume this will be similar to how we do Protocols with Generics.
 - After some investigation I noticed run time support for TypedDict before PEP 560 will need some metaclass hacks due to metaclass conflicts. But after version 3.7 with PEP 560 it seems simpler.
 
 
+== Finding a clearer usecase example for the Motivation section
+
+Just like there are usecases for parameterizing a class, there are usecases for parametrizing a container type like Typed Dictionary.
+The usecase that interested me into this was type paramterizing a higher order function that takes a function and processes some fields in `TypedDict`.
+
+
+[source,python]
+----
+from typing import TypedDict, TypeVar, Generic, List
+
+T = int
+
+class TD(TypedDict):
+    f1: List[T]
+
+def processor(a: List[T]) -> List[str]:
+    ...
+
+def hf(mapper: Callable[[List[T]], List[str]], data: TD) -> 'TD[str]':
+    return { **data, f1: mapper(data.f1) }
+----
+
+Something like is an example usecase. But still seems too contrived.
+There is potential in a usecase that takes TypedDict as a type for kwargs.
+Though typing kwargs with something other than a generic Dict is still being discussed.
