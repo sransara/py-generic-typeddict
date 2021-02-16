@@ -1,8 +1,6 @@
-PEP: 12
+PEP: 9999
 Title: Sample reStructuredText PEP Template
-Author: David Goodger <goodger@python.org>,
-        Barry Warsaw <barry@python.org>,
-        Brett Cannon <brett@python.org>
+Author: Samodya Abeysiriwardane <hi at sransara.com>
 Status: Active
 Type: Process
 Content-Type: text/x-rst
