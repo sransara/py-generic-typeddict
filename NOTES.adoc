@@ -8,28 +8,103 @@
 - After some investigation I noticed run time support for TypedDict before PEP 560 will need some metaclass hacks due to metaclass conflicts. 
   But after version 3.7 with PEP 560 it seems simpler.
 
-== Finding a clearer usecase example for the Motivation section
+== Abstract
 
-Just like there are usecases for parameterizing a class, there are usecases for parametrizing a container type like Typed Dictionary.
-The usecase that interested me into this was type paramterizing a higher order function that takes a function and processes some fields in `TypedDict`.
+PEP 589 introduces a type constructor `TypedDict` to support the use case where a dictionary object has a specific set of string keys, each with a value of a specific type. 
+But it does not specify the details of supporting generic TypedDicts.
+This PEP specifies the details of a type parameterized TypedDicts as an extension of PEP 589.
 
+== Motivation
+
+TypedDict is a container data type.
+Almost all container data types of the standard library support generics.
+TypedDicts should also support generics.
+
+With the addition of PEP 560, users can define generic TypedDict without the need for adhoc metaclass hacks.
+
+Following is an example where we can use type annotations to convey relationships between keys.
 
 [source,python]
 ----
-from typing import TypedDict, TypeVar, Generic, List
-
-T = int
-
-class TD(TypedDict):
-    f1: List[T]
-
-def processor(a: List[T]) -> List[str]:
-    ...
-
-def hf( data: TD,mapper: Callable[[List[T]], List[str]]) -> 'TD[str]':
-    return { **data, f1: mapper(data.f1) }
+class Page(TypedDict, Generic[T]):
+    uid: Hash[T]
+    desc: str
+    item: T
 ----
 
-Something like is an example usecase. But still seems too contrived.
-There is potential in a usecase that takes TypedDict as a type for kwargs.
-Though typing kwargs with something other than a generic Dict is still being discussed.
+Here is an example where the function on container type does not concern with the concrete type of the contents.
+
+[source,python]
+----
+def get_items(*pages: Page[T]) -> List[T]:
+    return [page["item"] for page in pages]
+----
+
+Another usage example in annotating polymorphic JSON responses.
+
+[source,python]
+----
+class Item(TypedDict):
+    type: str
+
+class ValueItem(Item):
+    value: int
+
+T = TypeVar('T')
+
+class ItemPager(TypedDict, Generic[T]):
+    next_page: Optional[str]
+    items: List[T]
+
+def get_value_items() -> List[ValueItem]:
+    value_items: List[ValueItem] = []
+    url = "https://example.com/value_items"
+    while url:
+        response = requests.get(url)
+        pager: ItemPager[ValueItem] = response.json()
+        url = pager['next_page']
+        value_items += pager['items']
+    return value_items
+----
+
+== Specification
+
+This PEP is an extension of PEP 589, hence details specified here for TypedDicts will be in addition to what is specified in PEP 589.
+
+=== Class based syntax
+
+Class based syntax for TypedDicts will follow the same specification as user defined generic types in PEP 484 and class based syntax specification detailed in PEP 589.
+A TypedDict can inherit from a Generic metaclass as well as TypedDict metadata class.
+
+[source,python]
+----
+from typing import TypedDict
+
+T = TypeVar("T")
+
+class Pager(TypedDict, Generic[T]):
+    next_page: str
+    items: List[T]
+----
+
+`Generic[T]` as a base class defines that the class `Pager` takes a single type parameter `T`.
+`Pager[int]` is a TypedDict that has a key `items` with value type `List[int]`. 
+
+=== Alternative syntax
+
+The following alternative syntax is semantically equivalent to the previous class based syntax example.
+Order of Generic subscript TypeVars will be in the order of their appearance.
+
+[source,python]
+----
+from typing import TypedDict
+
+T = TypeVar("T")
+
+Pager = TypedDict("Pager", {
+    'next_page': str,
+    'items': List[T],
+})
+----
+
+=== Inheritance
