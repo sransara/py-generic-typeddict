@@ -74,7 +74,6 @@ This PEP is an extension of PEP 589, hence details specified here for TypedDicts
 === Class based syntax
 
 Class based syntax for TypedDicts will follow the same specification as user defined generic types in PEP 484 and class based syntax specification detailed in PEP 589.
-A TypedDict can inherit from a Generic metaclass as well as TypedDict metadata class.
 
 [source,python]
 ----
@@ -108,3 +107,30 @@ Pager = TypedDict("Pager", {
 ----
 
 === Inheritance
+
+A TypedDict can only inherit from another TypedDict or TypedDict with Generic.
+This is in contrast to PEP 589, which specifies that a TypedDict can only inherit from a TypedDict.
+
+=== Using generic TypedDict types
+
+=== Type consistency
+
+Since TypedDict objects are mutable, value types should behave invariantly.
+Therefore at declaration a type checker should only accept invariant TypeVars.
+
+[source,python]
+----
+from typing import TypedDict
+
+T = TypeVar("T", covariant=True)
+
+class Page(TypedDict, Generic[T]): # Covariant T should not be allowed
+    item: T
+
+def set_item(p: Page[Animal]):
+    p["item"] = Animal()
+
+page: Page[Dog] = Page(item=Dog())
+set_item(page)      # Should not be allowed 
+page["item"].bark() # Run time error
+----
