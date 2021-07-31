@@ -1896,6 +1896,28 @@ def _namedtuple_mro_entries(bases):
 
 NamedTuple.__mro_entries__ = _namedtuple_mro_entries
 
+def _generic_alias_apply_tvarmap(alias, tvarmap):
+    """
+    Given alias: GenericAlias like list[list[T]] with tvarmap: { T: str }
+    returns list[list[str]]
+    """
+    if alias in tvarmap:
+        return tvarmap[alias]
+    elif isinstance(alias, GenericAlias):
+        return GenericAlias(
+            alias.__origin__,
+            tuple(
+                _generic_alias_apply_tvarmap(arg, tvarmap)
+                for arg in alias.__args__
+            )
+        )
+    elif isinstance(alias, _GenericAlias):
+        return alias.copy_with([
+            _generic_alias_apply_tvarmap(arg, tvarmap)
+            for arg in alias.__args__
+        ])
+    else:
+        return alias
 
 class _TypedDictMeta(type):
     def __new__(cls, name, bases, ns, total=True):
@@ -1907,10 +1929,10 @@ class _TypedDictMeta(type):
         Subclasses and instances of TypedDict return actual dictionaries.
         """
         for base in bases:
-            if type(base) is not _TypedDictMeta:
+            if type(base) is not _TypedDictMeta and base is not Generic:
                 raise TypeError('cannot inherit from both a TypedDict type '
                                 'and a non-TypedDict base class')
-        tp_dict = type.__new__(_TypedDictMeta, name, (dict,), ns)
+        tp_dict = type.__new__(_TypedDictMeta, name, bases, ns)
 
         annotations = {}
         own_annotations = ns.get('__annotations__', {})
@@ -1923,8 +1945,22 @@ class _TypedDictMeta(type):
         required_keys = set()
         optional_keys = set()
 
-        for base in bases:
-            annotations.update(base.__dict__.get('__annotations__', {}))
+        for obase in ns['__orig_bases__']:
+            base = obase.__dict__.get("__origin__")
+            if type(base) is not _TypedDictMeta:
+                continue
+
+            params = base.__dict__.get("__parameters__", [])
+            args = obase.__dict__.get("__args__", [])
+            tvarmap = dict(zip(params, args))
+
+            # Inherit typeargs applied annotations from parent TypedDicts
+            base_annotations = dict(base.__dict__.get('__annotations__', {}))
+            for anot_key, anot_val in base_annotations.items():
+                new_anot_val = _generic_alias_apply_tvarmap(anot_val, tvarmap)
+                base_annotations[anot_key] = new_anot_val
+
+            annotations.update(base_annotations)
             required_keys.update(base.__dict__.get('__required_keys__', ()))
             optional_keys.update(base.__dict__.get('__optional_keys__', ()))
 
@@ -2005,7 +2041,11 @@ def TypedDict(typename, fields=None, /, *, total=True, **kwargs):
     except (AttributeError, ValueError):
         pass
 
-    return _TypedDictMeta(typename, (), ns, total=total)
+    params = _collect_type_vars(fields.values())
+    return types.new_class(typename,
+        (_TypedDict, _GenericAlias(Generic, params)),
+        kwds={'total':total},
+        exec_body=lambda nsx: nsx.update(ns))
 
 _TypedDict = type.__new__(_TypedDictMeta, 'TypedDict', (), {})
 TypedDict.__mro_entries__ = lambda bases: (_TypedDict,)
