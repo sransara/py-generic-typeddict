@@ -27,15 +27,16 @@ TypedDict is a great choice to give a precise type for pure data containers.
 Almost all container data types of the standard library support generics.
 TypedDicts should also support generics.
 
-Following is an example where we can use type annotations to convey relationships 
-between keys.
+Following is few example usecases for having generic TypedDicts.
+
+Using type annotations to convey relationships between keys.
 
   class Page(TypedDict, Generic[T]):
       uid: Hash[T]
       desc: str
       item: T
 
-Here is an example where the function on container type does not concern with
+An example where the function on container type does not concern with
 the concrete type of the contents.
 
   def get_items(*pages: Page[T]) -> List[T]:
