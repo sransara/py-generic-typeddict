@@ -29,5 +29,26 @@ class Page(TypedDict[T]):
     ...
 ```
 
-If we want to support versions before 3.7, this syntax would be better
-because we can hide the workaround for metaclass conflicts.
+# 2021/08/01
+For versions lower than Python3.7, we have to use typing_extensions
+and to get that backward compatiblity support and handle metaclass conflicts
+we can have something like. But haven't tried it yet on typing_extensions.
+
+```
+from typing import *
+
+T = TypeVar("T")
+
+
+class LibraryMeta(type):
+    ...
+
+class AdHocMeta(GenericMeta, LibraryMeta):
+    ...
+
+class LibraryBase(metaclass=AdHocMeta):
+    ...
+
+class UserClass(LibraryBase, Generic[T]):
+    ...
+```
