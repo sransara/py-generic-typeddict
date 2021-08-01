@@ -1,1 +1,0 @@
-../cpython/Lib/typing.py
