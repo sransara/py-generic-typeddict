@@ -1,0 +1,8 @@
+[submodule "py-typing-extensions"]
+	path = typing-pep-0484
+	url = git@github.com:sransara/py-typing-pep-0484.git
+	branch = py-generic-typeddict
+[submodule "cpython"]
+	path = cpython
+	url = git@github.com:sransara/cpython.git
+	branch = py-generic-typeddict
