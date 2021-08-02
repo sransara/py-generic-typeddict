@@ -6,3 +6,7 @@
 	path = cpython-3.9
 	url = git@github.com:sransara/cpython.git
 	branch = py-generic-typeddict
+[submodule "pyright"]
+	path = pyright
+	url = git@github.com:sransara/pyright.git
+	branch = generic-typed-dict
