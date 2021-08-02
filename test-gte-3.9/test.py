@@ -1,3 +1,5 @@
+#! /usr/bin/env python3.9
+
 import dataclasses
 import typing as t
 from dataclasses import dataclass

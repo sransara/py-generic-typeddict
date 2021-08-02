@@ -16,7 +16,7 @@ through `stdlib` and provide a type consistency specification for type
 checkers.
 
 ``` python
-from typing import TypedDict, TypeVar, Generic, List
+from typing import TypedDict, TypeVar, Generic
 T = TypeVar("T")
 
 class TD(Generic[T], TypedDict):
@@ -33,10 +33,15 @@ reveal_type(td1) # info: Type of "td1" is "tuple[List[str], List[str]]"
 
 As sketched out by David Foster in typing-sig.
 
-- [ ] Draft a PEP
+- [-] Draft a PEP
 - [ ] Get reviewed in typing-sig, get soft approval
-- [ ] Implementations:
-    - [ ] Generic `TypedDict` in `typing.py`
-    - [ ] Generic `TypedDict` runtime in `typing_extensions`
-    - [ ] Generic `TypedDict` in one of the type checkers
+- [ ] Implementations
 - [ ] Get the PEP approved
+
+# Implementations
+- [ ] Generic `TypedDict` in `typing.py`
+    - [x] [Patch](https://github.com/python/cpython/compare/3.9...sransara:py-generic-typeddict) typing.py for version > 3.9
+- [ ] Generic `TypedDict` runtime in `typing_extensions`
+    - [x] [Patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) tested on 3.6.8
+- [ ] Generic `TypedDict` in one of the type checkers ([pyright](https://github.com/microsoft/pyright/))
+    - Old [patch](https://github.com/microsoft/pyright/pull/1390) to Pyright

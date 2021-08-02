@@ -52,3 +52,11 @@ class LibraryBase(metaclass=AdHocMeta):
 class UserClass(LibraryBase, Generic[T]):
     ...
 ```
+
+Got a working implementation with python version < 3.7 in 
+[typing-pep-0484/typing_extensions/src_py3/typing_extensions.py](typing-pep-0484/typing_extensions/src_py3/typing_extensions.py).
+
+Alternate syntax has a problem. Field items are unordered.
+So the order of parameters can't be decided by the order of 
+apparance if we are using a plain dict in python versions < 3.7.
+An option is to require OrderedDict if a value type is TypeVar.
