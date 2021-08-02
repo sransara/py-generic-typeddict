@@ -29,9 +29,10 @@ class BBB(AAA[KT, VT], t.Generic[VT, KT]):
 
 
 print("Here 1")
-class A(t.TypedDict, t.Generic[T, VT]):
+class A(t.TypedDict, t.Generic[T, VT], total=False):
     a1: list[list[T]]
     a2: VT
+
 
 class B(A[KT, int]):
     b: KT
@@ -39,7 +40,7 @@ class B(A[KT, int]):
 class C(B[str]):
     c: bool
 
-print(C.__annotations__)
+assert(C.__annotations__["a2"] is int)
 
 # print(A[int, t.List[str]].__args__)
 
@@ -59,3 +60,11 @@ print(C.__annotations__)
 # print("Here 3")
 # print(type(B))
 # print(A[int].__annotations__)
+
+class E(t.TypedDict):
+    e: str
+
+class F(E):
+    f: int
+
+assert(all(x in F.__annotations__ for x in ('e', 'f')))
