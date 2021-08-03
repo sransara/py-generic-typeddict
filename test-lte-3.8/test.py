@@ -29,3 +29,11 @@ class F(E[str]):
 assert(all(x in F.__annotations__ for x in ('e', 'f')))
 assert(F.__annotations__['e'] is str)
 assert('e' in F.__optional_keys__)
+
+class G(te.TypedDict):
+    g: str
+
+class H(G):
+    h: int
+
+assert(x in H.__annotations__ for x in ('g', 'h'))

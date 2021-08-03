@@ -1,40 +1,14 @@
 #! /usr/bin/env python3.9
 
-import dataclasses
 import typing as t
-from dataclasses import dataclass
 
 T = t.TypeVar("T")
 KT = t.TypeVar("KT")
 VT = t.TypeVar("VT")
 
-
-# @dataclass
-# class AA(t.Generic[T, KT]):
-#     a: T
-
-# class BB(AA[str, T]):
-#     b: str
-
-# class CC(BB[T]):
-#     c: int
-
-# print(dataclasses.fields(CC))
-
-class AAA(t.Generic[KT, VT]):
-    a1: KT
-    a2: VT
-
-class BBB(AAA[KT, VT], t.Generic[VT, KT]):
-    b: int
-
-
-
-print("Here 1")
 class A(t.TypedDict, t.Generic[T, VT], total=False):
-    a1: list[list[T]]
+    a1: t.List[t.List[T]]
     a2: VT
-
 
 class B(A[KT, int]):
     b: KT
@@ -42,31 +16,23 @@ class B(A[KT, int]):
 class C(B[str]):
     c: bool
 
-assert(C.__annotations__["a2"] is int)
+assert(all(x in C.__annotations__ for x in ('a1', 'a2', 'b', 'c')))
+assert(C.__annotations__['a2'] is int)
+assert(x in C.__optional_keys__ for x in ('a1', 'a2'))
 
-# print(A[int, t.List[str]].__args__)
+E = t.TypedDict("E", { 'e': T }, total=False)
 
-
-# class BB(AA):
-#     b: str
-
-# class C(t.TypedDict):
-#     c: str
-
-# class D(dict):
-#     ...
-
-# print("Here 2")
-# E = t.TypedDict("E", { 'e': T }, total=True)
-
-# print("Here 3")
-# print(type(B))
-# print(A[int].__annotations__)
-
-class E(t.TypedDict):
-    e: str
-
-class F(E):
+class F(E[str]):
     f: int
 
 assert(all(x in F.__annotations__ for x in ('e', 'f')))
+assert(F.__annotations__['e'] is str)
+assert('e' in F.__optional_keys__)
+
+class G(t.TypedDict):
+    g: str
+
+class H(G):
+    h: int
+
+assert(x in H.__annotations__ for x in ('g', 'h'))
