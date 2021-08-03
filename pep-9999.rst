@@ -98,7 +98,9 @@ Alternative syntax
 
 The following alternative syntax is semantically equivalent to the
 previous class based syntax example. Order of Generic subscript TypeVars
-will be in the order of their appearance.
+will be in the order of their appearance. For Python versions before 3.7
+where dict item order is not guaranteed, an ordered dictionary needs to be
+used with typevars.
 
    from typing import TypedDict
 
