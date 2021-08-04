@@ -39,9 +39,15 @@ As sketched out by David Foster in typing-sig.
 - [ ] Get the PEP approved
 
 # Implementations
-- [ ] Generic `TypedDict` in `typing.py`
+- [-] Generic `TypedDict` in `typing.py`
     - [x] [Patch](https://github.com/python/cpython/compare/3.9...sransara:py-generic-typeddict) typing.py for versions >= 3.9
-- [ ] Generic `TypedDict` runtime in `typing_extensions`
+    - [ ] Integrate to test suite
+- [-] Generic `TypedDict` runtime in `typing_extensions`
     - [x] [Patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) typing_extensions.py for versions < 3.9.2
-- [ ] Generic `TypedDict` in one of the type checkers ([pyright](https://github.com/microsoft/pyright/))
+    - [ ] Integrate to test suite
+- [-] Generic `TypedDict` in one of the type checkers ([pyright](https://github.com/microsoft/pyright/))
     - [x] [Patch](https://github.com/microsoft/pyright/compare/main...sransara:generic-typed-dict) to Pyright ([PR](https://github.com/microsoft/pyright/pull/1390)).
+    - [ ] Rebase the PR on to a current version
+    - [ ] Support for declaring with TypedDict constructor notation
+    - [ ] Adding proper test cases to the automated test suite
+    
