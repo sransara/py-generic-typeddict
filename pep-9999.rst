@@ -27,6 +27,10 @@ TypedDict is a great choice to give a precise type for pure data containers.
 Almost all container data types of the standard library support generics.
 TypedDicts should also support generics.
 
+PEP 589 [#PEP-589]_ sets a requirement that a TypedDict can only inherit from a TypedDict.
+This PEP proposes to relax that requirement to allow TypedDict with Generic and
+layout the details of allowing generics.
+
 Following is few example usecases for having generic TypedDicts.
 
 Using type annotations to convey relationships between keys.
@@ -80,13 +84,13 @@ Class based syntax for TypedDicts will follow the same specification as
 user defined generic types in PEP 484 [#PEP-484]_ and class based syntax
 specification detailed in PEP 589 [#PEP-589]_.
 
-   from typing import TypedDict
+  from typing import TypedDict, Generic, TypeVar
 
-   T = TypeVar("T")
+  T = TypeVar("T")
 
-   class Pager(TypedDict, Generic[T]):
-       next_page: str
-       items: List[T]
+  class Pager(TypedDict, Generic[T]):
+      next_page: str
+      items: List[T]
 
 ``Generic[T]`` as a base class defines that the class ``Pager`` takes a
 single type parameter ``T``. ``Pager[int]`` is a TypedDict that has a
@@ -100,16 +104,16 @@ The following alternative syntax is semantically equivalent to the
 previous class based syntax example. Order of Generic subscript TypeVars
 will be in the order of their appearance. For Python versions before 3.7
 where dict item order is not guaranteed, an ordered dictionary needs to be
-used with typevars.
+used with type variables.
 
-   from typing import TypedDict
+  from typing import TypedDict
 
-   T = TypeVar("T")
+  T = TypeVar("T")
 
-   Pager = TypedDict("Pager", {
-       'next_page': str,
-       'items': List[T],
-   })
+  Pager = TypedDict("Pager", {
+      'next_page': str,
+      'items': List[T],
+  })
 
 
 Inheritance
@@ -128,14 +132,14 @@ Inheriting a generic TypedDict with specified parameters,
 would inherit annotations with type variable parameters replaced by 
 those specified parameters.
 
-   class A(TypedDict, Generic[T, VT], total=False):
-      a1: List[T]
-      a2: VT
+  class A(TypedDict, Generic[T, VT], total=False):
+    a1: List[T]
+    a2: VT
 
-   class B(A[KT, int]):
-      b: KT
+  class B(A[KT, int]):
+    b: KT
 
-   assert(B.__annotations__["a2"] is int)
+  assert(B.__annotations__["a2"] is int)
 
 
 Using generic TypedDict types
@@ -143,10 +147,10 @@ Using generic TypedDict types
 
 Here is an example of how the type ``Pager`` can be used.
 
-   pager: Pager[str] = {
-       'next_page': 'https://example.com/value_items?p=2',
-       'items': ['item 1', 'item2',]
-   }
+  pager: Pager[str] = {
+      'next_page': 'https://example.com/value_items?p=2',
+      'items': ['item 1', 'item2',]
+  }
 
 If the type parameter is not specified, type checker can follow the same
 behavior as how it treats other generic instances without a type
@@ -162,19 +166,26 @@ Since TypedDict objects are mutable, value types should behave
 invariantly. Therefore at declaration a type checker should only accept
 invariant TypeVars.
 
-   from typing import TypedDict
+  from typing import TypedDict
 
-   T = TypeVar("T", covariant=True)
+  T = TypeVar("T", covariant=True)
 
-   class Page(TypedDict, Generic[T]): # Covariant T should not be allowed
-       item: T
+  class Page(TypedDict, Generic[T]): # Covariant T should not be allowed
+      item: T
 
-   def set_item(p: Page[Animal]):
-       p["item"] = Animal()
+  def set_item(p: Page[Animal]):
+      p["item"] = Animal()
 
-   page: Page[Dog] = Page(item=Dog())
-   set_item(page)
-   page["item"].bark() # Run time error
+  page: Page[Dog] = Page(item=Dog())
+  set_item(page)
+  page["item"].bark() # Run time error
+
+
+Backward compatibility
+----------------------
+PEP 589 [#PEP-589]_ specifies TypedDict can only inherit from another TypedDict,
+and in this PEP the constraint is relaxed to allow inherits from a TypedDict or Generic with TypedDict.
+So the behavior of inheriting from just TypedDicts will be kept as is.
 
 
 References
