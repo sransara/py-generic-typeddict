@@ -33,19 +33,19 @@ reveal_type(td1) # info: Type of "td1" is "tuple[List[str], List[str]]"
 
 As sketched out by David Foster in typing-sig.
 
-- [-] Draft a PEP
+- [ ] Draft a PEP
 - [ ] Get reviewed in typing-sig, get soft approval
 - [ ] Implementations
 - [ ] Get the PEP approved
 
 # Implementations
-- [-] Generic `TypedDict` in `typing.py`
+- [ ] Generic `TypedDict` in `typing.py`
     - [x] [Patch](https://github.com/python/cpython/compare/3.9...sransara:py-generic-typeddict) typing.py for versions >= 3.9
     - [ ] Integrate to test suite
-- [-] Generic `TypedDict` runtime in `typing_extensions`
+- [ ] Generic `TypedDict` runtime in `typing_extensions`
     - [x] [Patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) typing_extensions.py for versions < 3.9.2
     - [ ] Integrate to test suite
-- [-] Generic `TypedDict` in one of the type checkers ([pyright](https://github.com/microsoft/pyright/))
+- [ ] Generic `TypedDict` in one of the type checkers ([pyright](https://github.com/microsoft/pyright/))
     - [x] [Patch](https://github.com/microsoft/pyright/compare/main...sransara:generic-typed-dict) to Pyright ([PR](https://github.com/microsoft/pyright/pull/1390)).
     - [ ] Rebase the PR on to a current version
     - [ ] Support for declaring with TypedDict constructor notation

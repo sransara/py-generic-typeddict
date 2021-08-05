@@ -124,6 +124,19 @@ assumes ``Any`` for each position.
 
 All other details of TypedDict inheritance from PEP 589 [#PEP-589]_ applies.
 
+Inheriting a generic TypedDict with specified parameters, 
+would inherit annotations with type variable parameters replaced by 
+those specified parameters.
+
+   class A(TypedDict, Generic[T, VT], total=False):
+      a1: List[T]
+      a2: VT
+
+   class B(A[KT, int]):
+      b: KT
+
+   assert(B.__annotations__["a2"] is int)
+
 
 Using generic TypedDict types
 -----------------------------

@@ -11,8 +11,12 @@ class A(te.TypedDict, t.Generic[T, VT], total=False):
     a1: t.List[t.List[T]]
     a2: VT
 
+assert(A[int, str].__annotations__["a2"] is str)
+
 class B(A[KT, int]):
     b: KT
+
+assert(B.__annotations__["a2"] is int)
 
 class C(B[str]):
     c: bool
