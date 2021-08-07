@@ -1,4 +1,4 @@
-# Tracking an attempt to add generic support for TypedDict
+# An attempt to add generic support for TypedDict
 
 # Goal
 
@@ -44,6 +44,13 @@ Aug 4 2021:
 - Send out [email to typing-sig](https://mail.python.org/archives/list/typing-sig@python.org/thread/JIG63TRUTF7NSDRGUMI3GHRK3J564CUI/)
   for comments
 
+Aug 6 2021:
+- Foward references are proving to be an issue with the current alternative syntax spec, 
+  because `_collect_type_vars` can't look inside ForwardRef.
+- Considering that annotations are not meant for run time, 
+  the two previous patches which try to resolve generic params may be too complicated.
+- Create new [patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict-simple) for typing.py
+
 # TODO
 
 As sketched out by David Foster in typing-sig.
@@ -55,10 +62,12 @@ As sketched out by David Foster in typing-sig.
 
 # Implementations
 - [ ] Generic `TypedDict` in `typing.py`
-    - [x] [Patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict) typing.py
-    - [ ] Integrate to test suite
+    - [x] Simple [patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict-simple) that allows inherit from Generic
+        - [x] Integrate to test suite
+    - [x] [Patch with resolving annotation](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict)
+        - [ ] Integrate to test suite
 - [ ] Generic `TypedDict` runtime in `typing_extensions`
-    - [x] [Patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) typing_extensions.py for versions < 3.9.2
+    - [x] [Patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) typing_extensions.py
     - [ ] Integrate to test suite
 - [ ] Generic `TypedDict` in one of the type checkers ([pyright](https://github.com/microsoft/pyright/))
     - [x] [Patch](https://github.com/microsoft/pyright/compare/main...sransara:generic-typed-dict) to Pyright ([PR](https://github.com/microsoft/pyright/pull/1390)).
