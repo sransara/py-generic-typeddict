@@ -51,6 +51,9 @@ Aug 6 2021:
   the two previous patches which try to resolve generic params may be too complicated.
 - Create new [patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict-simple) for typing.py
 
+Aug 7 2021:
+- Create [issue in bugs.python.org](https://bugs.python.org/issue44863) and [PR](https://github.com/python/cpython/pull/27663)
+
 # TODO
 
 As sketched out by David Foster in typing-sig.
