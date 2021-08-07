@@ -1,11 +1,4 @@
-# My notes while drafting a [PEP](https://www.python.org/dev/peps/)
-
-The PR that started my journey through this rabbit hole:
-<https://github.com/microsoft/pyright/pull/1390>
-
-Advice in typing-sig mailing list with a sketch on how to move forward
-with a PEP:
-<https://mail.python.org/archives/list/typing-sig@python.org/thread/GKKSWMONVHRLFI4NJAT36RPZCGGIBJ3G/>
+# Tracking an attempt to add generic support for TypedDict
 
 # Goal
 
@@ -28,6 +21,28 @@ def test_td(aa: TD[T], bb: TD[T]):
 td1 = test_td({"f1": ["foo"]}, {"f1": ["bar"]})
 reveal_type(td1) # info: Type of "td1" is "tuple[List[str], List[str]]"
 ```
+
+# Timeline
+
+Jan 19 2021: 
+- Opened [PR in pyright](https://github.com/microsoft/pyright/pull/1390)
+- Requested by maintainers to get approval through the typing-sig or PEP drafting process
+- Send out [email to typing-sig](https://mail.python.org/archives/list/typing-sig@python.org/thread/GKKSWMONVHRLFI4NJAT36RPZCGGIBJ3G/)
+
+Jan 24 2021:
+- [Advice in typing-sig mailing list](https://mail.python.org/archives/list/typing-sig@python.org/thread/GKKSWMONVHRLFI4NJAT36RPZCGGIBJ3G/) 
+  with a sketch on how to move forward with a PEP
+
+...
+
+Aug 1 2021:
+- [PEP ready for review](pep-9999.rst)
+- Prototype [patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict) for typing.py
+- Prototype [patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) for typing_extensions.py
+
+Aug 4 2021:
+- Send out [email to typing-sig](https://mail.python.org/archives/list/typing-sig@python.org/thread/JIG63TRUTF7NSDRGUMI3GHRK3J564CUI/)
+  for comments
 
 # TODO
 
