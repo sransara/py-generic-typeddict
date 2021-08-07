@@ -40,7 +40,7 @@ As sketched out by David Foster in typing-sig.
 
 # Implementations
 - [ ] Generic `TypedDict` in `typing.py`
-    - [x] [Patch](https://github.com/python/cpython/compare/3.9...sransara:py-generic-typeddict) typing.py for versions >= 3.9
+    - [x] [Patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict) typing.py
     - [ ] Integrate to test suite
 - [ ] Generic `TypedDict` runtime in `typing_extensions`
     - [x] [Patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) typing_extensions.py for versions < 3.9.2

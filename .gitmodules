@@ -3,7 +3,7 @@
 	url = git@github.com:sransara/py-typing-pep-0484.git
 	branch = py-generic-typeddict
 [submodule "cpython"]
-	path = cpython-3.9
+	path = cpython
 	url = git@github.com:sransara/cpython.git
 	branch = py-generic-typeddict
 [submodule "pyright"]
