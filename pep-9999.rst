@@ -139,7 +139,7 @@ those specified parameters.
   class B(A[KT, int]):
     b: KT
 
-  assert(B.__annotations__["a2"] is int)
+In the above example B inherits `a2` with type `int`.
 
 
 Using generic TypedDict types
