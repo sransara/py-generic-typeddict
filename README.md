@@ -67,7 +67,7 @@ As sketched out by David Foster in typing-sig.
 - [ ] Generic `TypedDict` in `typing.py`
     - [x] Simple [patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict-simple) that allows inherit from Generic
         - [x] Integrate to test suite
-    - [x] [Patch with resolving annotation](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict)
+    - [x] [Patch with resolving annotation](https://github.com/python/cpython/compare/3.9...sransara:py-generic-typeddict)
         - [ ] Integrate to test suite
 - [ ] Generic `TypedDict` runtime in `typing_extensions`
     - [x] [Patch](https://github.com/python/typing/compare/master...sransara:py-generic-typeddict) typing_extensions.py
