@@ -52,7 +52,37 @@ Aug 6 2021:
 - Create new [patch](https://github.com/python/cpython/compare/main...sransara:py-generic-typeddict-simple) for typing.py
 
 Aug 7 2021:
-- Create [issue in bugs.python.org](https://bugs.python.org/issue44863) and [PR](https://github.com/python/cpython/pull/27663)
+- Create [issue in bugs.python.org](https://bugs.python.org/issue44863) and [cpython pull request](https://github.com/python/cpython/pull/27663)
+
+Sep 1st week 2021:
+- Including @uriyyo's suggestions in simplifying the implementaion and test cases
+- Including @sobolevn suggested test case which found a bug
+- Addressing @Fidget-Spinner's concerns
+- Pending issue on whether to proxy the dunders like `__total__` through the GenericAlias
+  ```python
+  class A(TypedDict, Generic[T]):
+    foo: T
+
+  assert(A[str].__required_keys__  == frozenset(['foo']) # Raises Attribute error
+  assert(A[str].__origin__.__required_keys__  == frozenset(['foo']) # Works
+  ```
+  Current personal decision to not proxy dunder attributes because:
+  ```python
+  class A(Generic[T]):
+    a: T
+
+  print(A.__annotations__) # {'a': ~T}
+  print(A[str].__annotations__) # raises AttributeError
+  print(A[str].__origin__.__annotations__) # {'a': ~T}
+  ```
+- Found a bug in the upstream implementation. Non generic TypedDicts are subscriptable. 
+  Not sure if this should be fixed in this PR by overriding `__getitem__`
+  ```python
+  class G(TypedDict):
+    g: str
+
+  print(G[int]) # G is subscriptable although not a Generic
+  ```
 
 # TODO
 
