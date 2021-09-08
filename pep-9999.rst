@@ -100,6 +100,9 @@ key ``items`` with value type ``List[int]``.
 Alternative syntax
 ------------------
 
+TODO: This section needs be re-thought out because in implementation
+`_collect_type_vars` cannot see inside `ForwardRef`s to find `TypeVars`.
+
 The following alternative syntax is semantically equivalent to the
 previous class based syntax example. Order of Generic subscript TypeVars
 will be in the order of their appearance. For Python versions before 3.7
