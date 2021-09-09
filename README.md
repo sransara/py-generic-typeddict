@@ -83,7 +83,10 @@ Sep 1st week 2021:
 
   print(G[int]) # G is subscriptable although not a Generic
   ```
-
+  
+8 Sep 2021:
+- Email sent to typing-sig mailing list: [Viability of letting TypedDict classes inherit from Generic without a PEP change](https://mail.python.org/archives/list/typing-sig@python.org/thread/I7P3ER2NH7SENVMIXK74U6L4Z5JDLQGZ/)
+    
 # TODO
 
 As sketched out by David Foster in typing-sig.
