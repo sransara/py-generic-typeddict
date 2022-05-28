@@ -1,5 +1,9 @@
 # An attempt to add generic support for TypedDict
 
+Mission complete 🎉.
+Now available [with Python 3.11](https://github.com/python/cpython/issues/89026#issuecomment-1116093221).
+Backported to Python <= 3.10 through [typing_extensions by @AlexWaygood](https://github.com/python/typing_extensions/pull/46).
+
 # Goal
 
 To extend `typing.TypedDict` [PEP 589](https://www.python.org/dev/peps/pep-0589/)
@@ -100,14 +104,17 @@ Sep 1st week 2021:
 
 - Email sent to typing-sig mailing list: [Viability of letting TypedDict classes inherit from Generic without a PEP change](https://mail.python.org/archives/list/typing-sig@python.org/thread/I7P3ER2NH7SENVMIXK74U6L4Z5JDLQGZ/)
 
-# TODO
+28 April 2022:
 
-As sketched out by David Foster in typing-sig.
+- PyCon 2022 Typing Summit "The future of TypedDict" by David Foster breathed new life into this feature.
 
-- [ ] Draft a PEP
-- [ ] Get reviewed in typing-sig, get soft approval
-- [ ] Implementations
-- [ ] Get the PEP approved
+29 April 2022:
+
+- [@JelleZijlstra](https://github.com/JelleZijlstra) resumed discussion in the PR and rest of the work that were needed for completion resumed.
+
+3 May 2022
+
+- [PR27663](https://github.com/python/cpython/pull/27663) is merged and CPython runtime support for Generic TypedDict will be available from Python 3.11.
 
 # Implementations
 
